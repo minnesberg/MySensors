@@ -10,7 +10,7 @@
 #include <OneWire.h>
 
 #define INTERRUPT 1
-#define CHILD_ID 13
+#define CHILD_ID 15
 #define BUTTON_PIN  3  // Arduino Digital I/O pin for button/reed switch
 #define ONE_WIRE_BUS 2 // Pin where dallase sensor is connected
 #define TEMPERATURE_PRECISION 11 // Lower resolution 
@@ -58,7 +58,7 @@ void presentation() {
   numSensors = sensors.getDeviceCount();
   // Present all sensors to controller
   for (int i=0; i<numSensors && i<MAX_ATTACHED_DS18B20; i++) {   
-     present(i, S_TEMP);
+     present(i+10, S_TEMP);
 
      if(sensors.getAddress(tempDeviceAddress, i)) {
           Serial.print("Found device ");
@@ -120,7 +120,7 @@ void loop()
         // Only send data if temperature has changed and no error
         if (lastTemperature[i] != temperature && temperature != -127.00 && temperature != 85.00) {
             // Send in the new temperature
-            send(msgTMP.setSensor(i).set(temperature,1));
+            send(msgTMP.setSensor(i+10).set(temperature,1));
             // Save new temperatures for next compare
             lastTemperature[i]=temperature;
         }
